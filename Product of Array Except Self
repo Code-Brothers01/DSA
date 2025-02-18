@@ -1,0 +1,59 @@
+// Bruteforce Solution
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        // Initialize the result vector. This will store the final products.
+        vector<int> result;
+
+        // Variable to store the product of all other numbers except the current one.
+        int product = 1;
+        
+        // Outer loop iterates through each element of the input array 'nums'
+        for(int i = 0; i < nums.size(); i++) {
+            
+            // Reset the product to 1 for each new iteration of 'i'
+            product = 1;
+            
+            // Inner loop iterates through each element of the input array 'nums'
+            for(int j = 0; j < nums.size(); j++) {
+                // Skip the case where 'i' and 'j' are equal (don't multiply the number by itself)
+                if(i == j) continue;
+                
+                // Multiply all numbers except for the current number at index 'i'
+                product *= nums[j];
+            }
+            
+            // Store the computed product in the result vector
+            result.push_back(product);
+        }
+
+        // Return the final result vector
+        return result;
+    }
+};
+//--------------------------------------------------------------------------------------------
+Optimal Solution
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> result(nums.size(), 1);  // Initialize result array with 1
+        
+        // Step 1: Compute the prefix product
+        int prefixProduct = 1; // To store the cumulative product of elements before each index
+        for (int i = 0; i < nums.size(); i++) {
+            result[i] = prefixProduct; // Set the current element to the prefix product
+            prefixProduct *= nums[i];  // Update prefix product for the next index
+        }
+        
+        // Step 2: Compute the suffix product and update the result array
+        int suffixProduct = 1;  // To store the cumulative product of elements after each index
+        for (int i = nums.size() - 1; i >= 0; i--) {// start from last index
+            result[i] *= suffixProduct;  // Multiply the result by the suffix product
+            suffixProduct *= nums[i];    // Update suffix product for the next index
+        }
+        
+        return result;  // Return the final result
+    }
+};
+
