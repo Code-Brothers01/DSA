@@ -1,0 +1,13 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        int revNo=0;
+        int duplicate =x;
+        while(x>0){
+            int ld = x%10;
+            revNo= (revNo*10) + ld;
+            x= x/10;
+        }
+        return duplicate == revNo;
+    }
+};
