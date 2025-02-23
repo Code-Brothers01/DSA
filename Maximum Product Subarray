@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int maxProduct = nums[0],minProduct = nums[0],total = nums[0];
+        for(int i = 1;i < nums.size();i++){
+            if(nums[i] < 0){
+                swap(minProduct,maxProduct);
+            }
+            maxProduct = max(nums[i],nums[i]*maxProduct);
+            minProduct = min(nums[i],nums[i]*minProduct);
+            total = max(total,maxProduct);
+        }
+        return total;
+    }
+};
