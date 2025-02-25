@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> st;  // Stack to store closing brackets for matching
+        
+        // Iterate through each character in the input string
+        for (char &ch : s) {
+            // If an opening bracket is found, push its corresponding closing bracket onto the stack
+            if (ch == '(') {
+                st.push(')');  
+            }
+            else if (ch == '{') {
+                st.push('}');
+            }
+            else if (ch == '[') {
+                st.push(']');
+            }
+            // If a closing bracket is found, check if it matches the expected closing bracket
+            else if (st.empty() || st.top() != ch) {
+                return false; // Invalid if stack is empty (no matching opening) or top doesn't match
+            }
+            else {
+                st.pop();  // If it matches, pop the top element from the stack
+            }
+        }
+
+        // If the stack is empty at the end, the string is valid; otherwise, it's not
+        return st.empty();
+    }
+};
