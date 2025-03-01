@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        // Step 1: Create a hashmap to store sorted string as key and anagram words as values
+        unordered_map<string, vector<string>> anagramGroups;
+        
+        // Step 2: Iterate through each word in the input list
+        for (string word : strs) {
+            string sortedWord = word;  // Copy the original word
+            sort(sortedWord.begin(), sortedWord.end()); // Sort the characters of the word
+            
+            // Step 3: Store the original word in the hashmap under the sorted version as the key
+            anagramGroups[sortedWord].push_back(word);
+        }
+        
+        // Step 4: Extract grouped anagrams from the hashmap
+        vector<vector<string>> result;
+        for (auto& entry : anagramGroups) {
+            result.push_back(entry.second);
+        }
+        
+        return result; // Step 5: Return the final list of grouped anagrams
+    }
+};
