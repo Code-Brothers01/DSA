@@ -1,0 +1,31 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        // Initialize two pointers: slow moves one step, fast moves two steps
+        ListNode* slow = head;
+        ListNode* fast = head;
+        
+        // Traverse the list until fast pointer reaches the end or finds a cycle
+        while (fast != NULL && fast->next != NULL) {
+            slow = slow->next;         // Move slow pointer one step
+            fast = fast->next->next;   // Move fast pointer two steps
+            
+            // If slow and fast pointers meet, cycle is detected
+            if (slow == fast) {
+                return true;
+            }
+        }
+        
+        // If we reach here, it means no cycle was found
+        return false;
+    }
+};
