@@ -1,0 +1,70 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        // Base case: if t is larger than s, no such window can exist
+        if (t.size() > s.size()) return "";
+
+        // Frequency map for characters in t
+        unordered_map<char, int> t_freq;
+        for (char c : t) {
+            t_freq[c]++;
+        }
+
+        // Frequency map for characters in the current window
+        unordered_map<char, int> window_freq;
+
+        // Two pointers for the sliding window
+        int left = 0, right = 0;
+        // Number of unique characters in t that need to be present in the window
+        int required = t_freq.size();
+        // Number of unique characters in the current window that match the required frequency in t
+        int formed = 0;
+
+        // Variables to track the minimum window
+        int min_len = INT_MAX;
+        int min_left = 0;
+
+        // Expand the window by moving the right pointer
+        while (right < s.size()) {
+            char c = s[right];
+            window_freq[c]++;
+
+            // Check if the current character's frequency matches that in t
+            if (t_freq.count(c) && window_freq[c] == t_freq[c]) {
+                formed++;
+            }
+
+            // Contract the window from the left as long as it remains valid
+            while (left <= right && formed == required) {
+                // Update the minimum window if the current one is smaller
+                if (right - left + 1 < min_len) {
+                    min_len = right - left + 1;
+                    min_left = left;
+                }
+
+                // Character to be removed from the window
+                char left_char = s[left];
+                window_freq[left_char]--;
+
+                // If the removed character was part of t and its frequency falls below the required count
+                if (t_freq.count(left_char) && window_freq[left_char] < t_freq[left_char]) {
+                    formed--;
+                }
+
+                // Move the left pointer to the right to contract the window
+                left++;
+            }
+
+            // Move the right pointer to the right to expand the window
+            right++;
+        }
+
+        // If no valid window was found, return an empty string
+        if (min_len == INT_MAX) {
+            return "";
+        }
+
+        // Return the minimum window substring
+        return s.substr(min_left, min_len);
+    }
+};
