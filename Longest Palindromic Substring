@@ -1,0 +1,44 @@
+class Solution {
+public:
+    // Function to expand around the center and find the longest palindrome from 'left' and 'right'
+    pair<int, int> expandAroundCenter(string& s, int left, int right) {
+        // Continue expanding as long as characters are equal and within bounds
+        while (left >= 0 && right < s.size() && s[left] == s[right]) {
+            left--;  // Move left pointer to the left
+            right++; // Move right pointer to the right
+        }
+        // Return the final correct indices (left + 1 and right - 1) after over-expanding
+        return {left + 1, right - 1};
+    }
+
+    string longestPalindrome(string s) {
+        int n = s.size(); // Length of the string
+        if (n == 0) return ""; // Edge case: Empty string
+
+        int start = 0;  // Start index of the longest palindrome
+        int maxLen = 0; // Maximum length of the palindrome found
+
+        // Iterate through each character of the string
+        for (int i = 0; i < n; i++) {
+            // Check for odd-length palindrome (centered at one character)
+            auto [l1, r1] = expandAroundCenter(s, i, i);
+            // Check for even-length palindrome (centered between two characters)
+            auto [l2, r2] = expandAroundCenter(s, i, i + 1);
+
+            // Update longest palindrome if found (odd length case)
+            if (r1 - l1 + 1 > maxLen) {
+                start = l1;
+                maxLen = r1 - l1 + 1;
+            }
+
+            // Update longest palindrome if found (even length case)
+            if (r2 - l2 + 1 > maxLen) {
+                start = l2;
+                maxLen = r2 - l2 + 1;
+            }
+        }
+
+        // Return the longest palindrome substring using the start index and maxLen
+        return s.substr(start, maxLen);
+    }
+};
