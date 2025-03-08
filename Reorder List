@@ -1,0 +1,53 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        // Edge case: If the list has fewer than 3 nodes, no reordering needed
+        if (!head || !head->next || !head->next->next) return;
+
+        // Step 1: Find the middle of the linked list (Slow-Fast Pointer Technique)
+        ListNode* slow = head;        // Slow pointer moves 1 step at a time
+        ListNode* fast = head;        // Fast pointer moves 2 steps at a time
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        // Step 2: Reverse the second half of the list
+        ListNode* prev = nullptr;
+        ListNode* curr = slow->next;  // Start reversing from the node after the middle
+        slow->next = nullptr;        // Cut the list into two halves
+        while (curr) {
+            ListNode* next = curr->next;  // Store the next node
+            curr->next = prev;           // Reverse the link
+            prev = curr;                 // Move `prev` forward
+            curr = next;                 // Move `curr` forward
+        }
+
+        // Step 3: Merge the two halves
+        ListNode* first = head;  // Pointer for the first half
+        ListNode* second = prev; // Pointer for the reversed second half
+        while (second) {
+            // Store the next nodes
+            ListNode* tmp1 = first->next;
+            ListNode* tmp2 = second->next;
+
+            // Reordering links
+            first->next = second;
+            second->next = tmp1;
+
+            // Move pointers forward
+            first = tmp1;
+            second = tmp2;
+        }
+    }
+};
