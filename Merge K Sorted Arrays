@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> mergeKSortedArrays(vector<vector<int>>& kArrays, int k) {
+    vector<int> result; // Final merged sorted array
+
+    // Min-heap to track the smallest elements from each array
+    priority_queue<pair<int, pair<int, int>>, 
+                   vector<pair<int, pair<int, int>>>, 
+                   greater<pair<int, pair<int, int>>>> minHeap;
+
+    // Step 1: Insert the first element of each array into the heap
+    for (int i = 0; i < k; i++) {
+        if (!kArrays[i].empty()) {
+            minHeap.push({kArrays[i][0], {i, 0}}); 
+            // {value, {arrayIndex, elementIndex}}
+        }
+    }
+
+    // Step 2: Extract the smallest element and add the next element from the same array
+    while (!minHeap.empty()) {
+        auto curr = minHeap.top(); // Extract the smallest element
+        minHeap.pop();
+
+        int value = curr.first;         // Value of the smallest element
+        int arrayIndex = curr.second.first;  // Which array this element came from
+        int elementIndex = curr.second.second; // Index of this element in its array
+
+        result.push_back(value); // Add the extracted element to the result array
+
+        // Step 3: Insert the next element from the same array if available
+        if (elementIndex + 1 < kArrays[arrayIndex].size()) {
+            minHeap.push({kArrays[arrayIndex][elementIndex + 1], {arrayIndex, elementIndex + 1}});
+        }
+    }
+
+    return result; // Return the merged sorted array
+}
