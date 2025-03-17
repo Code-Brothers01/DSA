@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int climbStairs(int n) {
+        // Base case: If there's only 1 step, only 1 way to climb.
+        if (n == 1) return 1;
+
+        // Initialize variables for the previous two results
+        int prev1 = 2; // Ways to reach step 2
+        int prev2 = 1; // Ways to reach step 1
+
+        // Iterate from step 3 to n, updating the ways dynamically
+        for (int i = 3; i <= n; i++) {
+            int curr = prev1 + prev2; // Current step's ways = sum of last two steps
+            prev2 = prev1;  // Move prev1 to prev2 (shift the values)
+            prev1 = curr;   // Update prev1 to the current calculated value
+        }
+
+        // Return the final computed value
+        return prev1;
+    }
+};
